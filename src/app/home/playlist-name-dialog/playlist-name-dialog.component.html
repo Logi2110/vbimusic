@@ -1,0 +1,14 @@
+<h3 mat-dialog-title>Create new playlist</h3>
+
+<mat-dialog-content [formGroup]="playlist">
+    <mat-form-field>
+        <mat-label>Enter a name</mat-label>
+        <input matInput
+                formControlName="name">
+    </mat-form-field>
+</mat-dialog-content>
+
+<div class="playlist-action-wrap">
+    <span (click)="cancelPlaylist()" class="cancel-btn">Cancel</span>
+    <span (click)="createPlaylist()">Commit</span>
+</div>

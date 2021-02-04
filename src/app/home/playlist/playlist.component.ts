@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SongService } from 'src/app/song.service';
 
@@ -14,7 +14,9 @@ export class PlaylistComponent implements OnInit {
   playlist = new BehaviorSubject([]);
   playlistPage = 'noSong'
   songs;
+  songsSub: Subscription;
   playlistId = null;
+  playlistName;
 
   songs$ = combineLatest([this.songService.songs, this.searchSongString]).pipe(
     map(([songs, searchSongString ]) => {
@@ -31,7 +33,8 @@ export class PlaylistComponent implements OnInit {
 
   ngOnInit(): void {
     this.playlistId = +this.route.snapshot.params['id'];
-    this.songs$.pipe(
+    this.playlistName = this.route.snapshot.queryParams.playlistName;
+    this.songsSub = this.songs$.pipe(
       map((songs) => {
         if(this.playlistId == 0) {
           return songs;
@@ -42,6 +45,7 @@ export class PlaylistComponent implements OnInit {
             song['isSelected'] = playlist.songs.some(x => x.id == song.id);
             return song;
           });
+          this.playlistName = playlist.name;
           this.playlist.next(playlist.songs);
           return songs;
         }
@@ -70,7 +74,7 @@ export class PlaylistComponent implements OnInit {
         songs: this.playlist.value,
         createdAt: new Date(),
         id: +localStorage.getItem('playlistId') + 1,
-        name: `Playlist${+localStorage.getItem('playlistId') + 1}`
+        name: this.playlistName
       }
       localStorage.setItem('playlistId', `${+localStorage.getItem('playlistId') + 1}`)
       prePlaylists = [...prePlaylists, playlist];
@@ -107,6 +111,10 @@ export class PlaylistComponent implements OnInit {
     // this.router.navigate([''], { fragment: 'playlist' });
     this.router.navigate(['']);
 
+  }
+
+  ngOnDestroy() {
+    this.songsSub.unsubscribe();
   }
 
 }

@@ -1,6 +1,7 @@
 <mat-tab-group mat-align-tabs="center" #musicTab>
     <mat-tab label="All Song">
         <div class="search-bar-wrap">
+            <mat-icon>search</mat-icon>
             <input type="text" class="search-ip" (input)="searchSong($event.target.value)">
         </div>
         <div class="play-container">

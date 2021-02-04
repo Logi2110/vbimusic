@@ -24,7 +24,7 @@
                 [ngClass]="{'selected': song.isSelected }"
                 (click)="selectSong(song)"
             >
-                <div class="play-play-iconicon">
+                <div>
                     <img [src]="song.thumbnailUrl" class="play-img" />
                 </div>
                 <div>
@@ -40,7 +40,7 @@
     </div>
 
     <div class="add-song-footer">
-        <div class="noOfSong-added">5 Songs Added</div>
+        <div class="noOfSong-added">{{ playlist?.value?.length ? playlist?.value?.length : 0 }} Songs Added</div>
         <div class="save-playlist" (click)="savePlaylist()">Save Playlist</div>
     </div>
 </div>
@@ -49,7 +49,7 @@
     <div class="playlist-header">
         <div class="playlist-title">
             <mat-icon (click)="backToHomePage()">arrow_back</mat-icon>
-            <h3>Playlist Name</h3>
+            <h3>{{ playlistName }}</h3>
         </div>
         <div class="playlist-option">
             <mat-icon class="playlist-add-ic" (click)="addSongToPlaylist()">playlist_add</mat-icon>
@@ -59,7 +59,7 @@
 
     <ng-container *ngFor="let song of playlist | async">
         <div class="play-card">
-            <div class="play-play-iconicon">
+            <div>
                 <img [src]="song.thumbnailUrl" class="play-img" />
             </div>
             <div>

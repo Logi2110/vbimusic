@@ -11,13 +11,18 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { PlaylistNameDialogComponent } from './home/playlist-name-dialog/playlist-name-dialog.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    PlaylistComponent
+    PlaylistComponent,
+    PlaylistNameDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -26,9 +31,14 @@ import { MatButtonModule } from '@angular/material/button';
     BrowserAnimationsModule,
     MatTabsModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatInputModule,
+    MatDialogModule,
+    ReactiveFormsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ PlaylistNameDialogComponent ]
+
 })
 export class AppModule { }
