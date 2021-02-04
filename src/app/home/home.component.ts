@@ -15,12 +15,14 @@ import { PlaylistNameDialogComponent } from './playlist-name-dialog/playlist-nam
 })
 export class HomeComponent implements OnInit {
   @ViewChild("musicTab", { static: false }) musicTab: MatTabGroup;
-  searchSongString = new BehaviorSubject<string>('');
+  searchSongString$ = new BehaviorSubject<string>('');
   playlists = JSON.parse(localStorage.getItem('playlists'));
+  isAllSongsTab = true;
 
-  songs = combineLatest([this.songService.songs, this.searchSongString]).pipe(
+  songs = combineLatest([this.songService.songs$, this.searchSongString$]).pipe(
     map(([songs, searchSongString ]) => {
-      songs = songs.filter(song => song.title.substring(0, searchSongString?.length) == searchSongString)
+      songs = songs.filter(song => song.title.substring(0, searchSongString?.length) == searchSongString);
+      songs = songs.splice(0, 10)
       return songs;
     })
   )
@@ -33,13 +35,21 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log(this.songService.getTab())
+    this.songService.setPlaylist({});
     // if(this.route.snapshot.fragment == 'playlist') {
     //   this.isAllSongs = false;
     // }
   }
 
+  ngAfterViewInit()	{
+    if(this.songService.getTab()) {
+      this.musicTab.selectedIndex = 1;
+    }
+  }
+
   searchSong(string) {
-    this.searchSongString.next(string.trim().toLowerCase());
+    this.searchSongString$.next(string.trim().toLowerCase());
   }
 
   createPlaylist() {
@@ -58,6 +68,7 @@ export class HomeComponent implements OnInit {
   }
 
   goToPlaylist(playlist) {
+    this.songService.setPlaylist(playlist);
     this.router.navigateByUrl(`playlist/${playlist.id}`);
   }
 

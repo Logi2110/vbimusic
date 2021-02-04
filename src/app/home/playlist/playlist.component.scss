@@ -3,7 +3,7 @@ h5, p {
 }
 
 .selected {
-    background: rgb(183, 206, 206);
+    border-left: 1px solid #00e676;
 }
 
 .no-song-container {
@@ -48,6 +48,7 @@ h5, p {
     display: flex;
     flex-flow: column;
     padding: 20px 15px;
+    position: relative;
 
     .search-ip {
         height: 32px;
@@ -56,8 +57,19 @@ h5, p {
         border: none;
         outline: none;
         padding: 0 13px;
+        padding-left: 40px;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+    mat-icon {
+        position: absolute;
+        margin-top: 5px;
+        margin-left: 10px;
     }
 }
+
 
 h3, p {
     padding: 0;
@@ -211,4 +223,12 @@ h3 {
     mat-icon {
         font-size: 24px;
     }
+}
+
+.select-card {
+    background: rgb(32,32,32);
+    border-radius: 5px;
+    padding: 15px 10px;
+    margin-bottom: 15px;
+    border-bottom: none;
 }

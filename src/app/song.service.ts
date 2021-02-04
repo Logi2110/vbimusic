@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 import { environment } from '../environments/environment'
 
@@ -10,6 +10,8 @@ import { environment } from '../environments/environment'
 })
 export class SongService {
   url: string = environment.url;
+  playlist = {};
+  tab = 0;
 
   constructor(
     private http: HttpClient
@@ -23,7 +25,8 @@ export class SongService {
     return this.http.get<{ id: number, userId: number, title: string }[]>(`${this.url}/albums`)
   }
 
-  songs = combineLatest([this.getSong(), this.getAlbum()]).pipe(
+  songs$ = combineLatest([this.getSong(), this.getAlbum()]).pipe(
+    take(1),
     map(([songs, albums]) => {
       songs.map( song => {
         song['playTime'] = '05:00';
@@ -35,4 +38,20 @@ export class SongService {
       return songs;
     })
   )
+
+  setPlaylist(playlist) {
+    this.playlist = playlist;
+  }
+
+  getPlaylist() {
+    return this.playlist;
+  }
+
+  setTab() {
+    this.tab = 1;
+  }
+
+  getTab() {
+    return this.tab;
+  }
 }
