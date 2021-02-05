@@ -14,25 +14,29 @@ export class PlaylistComponent implements OnInit {
   playlist$ = new BehaviorSubject<any>({});
   playlistPage = 'noSong';
   songs;
-  songsSub: Subscription;
-  playlistId = null;
   playlistName;
   addSongs = [];
 
-  songs$ = combineLatest([this.songService.songs$, this.searchSongString$]).pipe(
+  // called when you search the song
+  songsSub$ = combineLatest([this.songService.songs$, this.searchSongString$]).pipe(
     map(([songs, searchSongString ]) => {
       songs.map(song => {
         if(this.playlist$?.value?.id) {
           song['isSelected'] = this.playlist$.value.songs.some(x => x.id == song.id);
         }
       })
+
+      if(this.playlist$.value?.songs) {
+        this.addSongs = [...this.playlist$.value.songs];
+      }
+
       songs = songs.filter(song => song.title.substring(0, searchSongString.length) == searchSongString);
       songs = songs.sort((song1: any, song2: any) => song2.isSelected - song1.isSelected);
       songs = songs.splice(0, 10);
       return songs;
     }),
-    tap(data => console.log('song', data))
-  )
+    tap(data => console.log('playlist', this.playlist$.value, 'addSong', this.addSongs, 'song', data))
+  ).subscribe(songs => this.songs = songs)
 
   constructor(
     private songService: SongService,
@@ -40,25 +44,20 @@ export class PlaylistComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.songService.setTab();
-    this.playlist$.subscribe(data => console.log('playlist', data))
   }
 
   ngOnInit(): void {
     this.playlistName = this.route.snapshot.queryParams.playlistName;
     this.playlist$.next(this.songService.getPlaylist());
-    this.songsSub = this.songs$.pipe(
-      map((songs) => {
-        return songs;
-      })
-    ).subscribe(data => {
-      this.songs = data;
-    })
-
+    // called when you save the songs
     this.playlist$.subscribe(playlist => {
-      console.log(playlist)
-      if(playlist?.songs) {
+      if(playlist?.songs && this.songs) {
         this.addSongs = [...playlist.songs];
+        this.songs.map(song => {
+          song['isSelected'] = playlist.songs.some(x => x.id == song.id);
+        })
       }
+      console.log('playlist', playlist, 'addSongs', this.addSongs, 'songs', this.songs)
     })
 
     if(this.playlist$?.value?.id) {
@@ -68,13 +67,14 @@ export class PlaylistComponent implements OnInit {
     }
   }
 
+  // called when you save the songs
   savePlaylist() {
     let prePlaylists = JSON.parse(localStorage.getItem('playlists'));
     if(this.playlist$?.value?.id) {
       let updatePlaylist = this.playlist$.value;
       updatePlaylist.songs = [...this.addSongs];
       this.playlist$.next(updatePlaylist);
-      let updatePlaylistIndex = prePlaylists.findIndex( playlist => playlist.id == this.playlistId);
+      let updatePlaylistIndex = prePlaylists.findIndex( playlist => playlist.id == this.playlist$.value.id);
       prePlaylists[updatePlaylistIndex] = updatePlaylist;
     } else {
       let playlist = {
@@ -83,8 +83,8 @@ export class PlaylistComponent implements OnInit {
         id: +localStorage.getItem('playlistId') + 1,
         name: this.playlistName
       }
-      this.playlistId = Number(localStorage.getItem('playlistId')) + 1;
-      localStorage.setItem('playlistId', this.playlistId);
+      let playlistId = Number(localStorage.getItem('playlistId')) + 1;
+      localStorage.setItem('playlistId', String(playlistId));
       this.playlist$.next(playlist);
       prePlaylists.push(playlist);
     }
@@ -94,7 +94,8 @@ export class PlaylistComponent implements OnInit {
     this.playlistPage = 'playlist';
   }
 
-  goToPlaylistPage() {
+  // called when you unsave the song selection
+  unsavePlaylist() {
     this.songs.map(song => {
       song.isSelected = this.playlist$.value.songs.some(x => x.id == song.id);
     });
@@ -106,10 +107,7 @@ export class PlaylistComponent implements OnInit {
     }
   }
 
-  searchSong(string) {
-    this.searchSongString$.next(string);
-  }
-
+  // called during you select and unselect the songs
   selectSong(song) {
     song.isSelected = !song.isSelected;
     if(song.isSelected) {
@@ -120,11 +118,14 @@ export class PlaylistComponent implements OnInit {
       }
     }
     console.log(this.addSongs)
-
   }
 
+  searchSong(string) {
+    this.searchSongString$.next(string);
+  }
+
+  // called when you land on select song page
   addSongToPlaylist() {
-    // this.searchSongString$.next('');
     this.playlistPage = 'selectSong';
   }
 
@@ -133,7 +134,7 @@ export class PlaylistComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.songsSub.unsubscribe();
+    this.songsSub$.unsubscribe();
   }
 
 }

@@ -10,10 +10,10 @@
 <div *ngIf="playlistPage == 'selectSong'" class="add-song-container">
     <div class="add-song-header-wrap">
         <div class="add-song-header">
-            <mat-icon (click)="goToPlaylistPage()">arrow_back</mat-icon>
+            <mat-icon (click)="unsavePlaylist()">arrow_back</mat-icon>
             <h3>Add Songs</h3>
         </div>
-        <span (click)="goToPlaylistPage()">Cancel</span>
+        <span (click)="unsavePlaylist()">Cancel</span>
     </div>
     <div class="search-bar-wrap">
         <mat-icon>search</mat-icon>
@@ -42,7 +42,7 @@
     </div>
 
     <div class="add-song-footer">
-        <div class="noOfSong-added">{{ playlist?.value?.length ? playlist?.value?.length : 0 }} Songs Added</div>
+        <div class="noOfSong-added">{{ addSongs?.length }} Songs Added</div>
         <div class="save-playlist" (click)="savePlaylist()">Save Playlist</div>
     </div>
 </div>
