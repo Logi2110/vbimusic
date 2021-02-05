@@ -72,4 +72,9 @@ export class HomeComponent implements OnInit {
     this.router.navigateByUrl(`playlist/${playlist.id}`);
   }
 
+  deletePlaylist(playlistId) {
+    this.playlists.splice(this.playlists.findIndex(x => x.id == playlistId), 1);
+    localStorage.setItem('playlists', JSON.stringify(this.playlists));
+  }
+
 }

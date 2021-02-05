@@ -137,4 +137,17 @@ export class PlaylistComponent implements OnInit {
     this.songsSub$.unsubscribe();
   }
 
+  shuffleSongs(playlist){
+    let songs = playlist.songs;
+    let songsLength = songs.length;
+    let t, i;
+    while(songsLength) {
+      i = Math.floor(Math.random() * songsLength--);
+      t = songs[songsLength];
+      songs[songsLength] = songs[i];
+      songs[i] = t;
+    }
+    this.playlist$.next(playlist);
+  }
+
 }

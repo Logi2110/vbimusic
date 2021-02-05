@@ -52,11 +52,11 @@
         <div class="playlist-header">
             <div class="playlist-title">
                 <mat-icon (click)="backToHomePage()">arrow_back</mat-icon>
-                <h3>{{ playlist.name }}</h3>
+                <h3 class="playlist-name">{{ playlist.name }}</h3>
             </div>
             <div class="playlist-option">
                 <mat-icon class="playlist-add-ic" (click)="addSongToPlaylist()">playlist_add</mat-icon>
-                <mat-icon>shuffle</mat-icon>
+                <mat-icon (click)="shuffleSongs(playlist)">shuffle</mat-icon>
             </div>
         </div>
         <ng-container *ngFor="let song of playlist.songs">

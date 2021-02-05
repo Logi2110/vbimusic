@@ -6,6 +6,7 @@ h3, p {
 h3 {
     font-weight: 300;
     font-size: 16px;
+    text-transform: capitalize;
 }
 
 .search-bar-wrap {
@@ -144,14 +145,19 @@ mat-tab-group {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        span {
+            color: #999999;
+        }
     }
 
     .playlist-lower-content {
         display: flex;
         justify-content: space-between;
-
+        color: #999999;
         mat-icon {
             font-size: 20px;
+            color: #ff5e58;
+            opacity: 0.5;
         }
     }
 }

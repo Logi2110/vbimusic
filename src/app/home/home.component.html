@@ -1,5 +1,5 @@
 <mat-tab-group mat-align-tabs="center" #musicTab>
-    <mat-tab label="All Song">
+    <mat-tab label="All Songs">
         <div class="search-bar-wrap">
             <mat-icon>search</mat-icon>
             <input type="text" class="search-ip" (input)="searchSong($event.target.value)">
@@ -33,12 +33,12 @@
                 <img src="assets/playlist_icon" class="playlist-img" />
                 <div class="playlist-content">
                     <div class="playlist-upper-content">
-                        <h3 class="playlist-name"> {{ playlist.name }} </h3>
+                        <h3> {{ playlist.name }} </h3>
                         <span> {{ playlist.createdAt | date: 'short' }} </span>
                     </div>
                     <div class="playlist-lower-content">
                         <span>{{ playlist.songs.length }} songs</span>
-                        <mat-icon>delete</mat-icon>
+                        <mat-icon (click)="deletePlaylist(playlist.id)">close</mat-icon>
                     </div>
                 </div>
             </div>
