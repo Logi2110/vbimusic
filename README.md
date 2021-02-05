@@ -1,8 +1,7 @@
 # VbiMusic
 
-# Gitlab Repo link
-https://gitlab.com/practice_newtechnology/angular/vbimusic.git
-
+# Github Repo link
+https://github.com/Logi2110/vbimusic
 ## Deployed on Heroku
 
 
