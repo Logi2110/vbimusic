@@ -1,0 +1,11 @@
+.loader {
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+svg path,
+svg rect {
+    fill: #00e676;
+}

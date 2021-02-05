@@ -3,7 +3,7 @@
     <div class="no-song-wrapper">
         <h5 class="looking-song">Looking for songs?</h5>
         <p class="build-playlist">Let's build your new playlist</p>
-        <button mat-flat-button color="primary" class="add-song-btn" (click)="addSongToPlaylist()">Add Song</button>
+        <button mat-flat-button color="primary" class="add-song-btn" (click)="addSongToPlaylist()">Add Songs</button>
     </div>
 </div>
 
@@ -59,7 +59,7 @@
                 <mat-icon (click)="shuffleSongs(playlist)">shuffle</mat-icon>
             </div>
         </div>
-        <ng-container *ngFor="let song of playlist.songs">
+        <ng-container *ngFor="let song of playlist.songs;">
             <div class="play-card">
                 <div>
                     <img [src]="song.thumbnailUrl" class="play-img" />
@@ -74,6 +74,12 @@
                 </div>
             </div>
         </ng-container>
+        <div *ngIf="playlist.songs.length == 0">
+            <div class="no-songs-wrap">
+                <p>No Songs in the playlist</p>
+                <button mat-flat-button color="primary" class="add-song-btn" (click)="addSongToPlaylist()">Add Songs</button>
+            </div>        
+        </div>
     </div>
 </div>
 

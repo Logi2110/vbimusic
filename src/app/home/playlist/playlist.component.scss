@@ -37,12 +37,14 @@ h5, p {
             margin-bottom: 35px;
         }
 
-        .add-song-btn {
-            background: #00c853;
-        }
     }
 
 }
+
+.add-song-btn {
+    background: #00c853;
+}
+
 
 .search-bar-wrap {
     display: flex;
@@ -232,4 +234,17 @@ h3 {
     padding: 15px 10px;
     margin-bottom: 15px;
     border-bottom: none;
+}
+
+.no-songs-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 600px;
+    flex-direction: column;
+    p {
+        font-size: 16px;
+        color: #999999;
+        margin-bottom: 15px;
+    }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SongService } from '../song.service';
 import { BehaviorSubject, combineLatest, of, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTabGroup } from '@angular/material/tabs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -24,7 +24,8 @@ export class HomeComponent implements OnInit {
       songs = songs.filter(song => song.title.substring(0, searchSongString?.length) == searchSongString);
       songs = songs.splice(0, 10)
       return songs;
-    })
+    }),
+    delay(1000)
   )
 
   constructor(
@@ -35,11 +36,7 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.songService.getTab())
     this.songService.setPlaylist({});
-    // if(this.route.snapshot.fragment == 'playlist') {
-    //   this.isAllSongs = false;
-    // }
   }
 
   ngAfterViewInit()	{

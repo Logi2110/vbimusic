@@ -1,26 +1,32 @@
+
 <mat-tab-group mat-align-tabs="center" #musicTab>
     <mat-tab label="All Songs">
-        <div class="search-bar-wrap">
-            <mat-icon>search</mat-icon>
-            <input type="text" class="search-ip" (input)="searchSong($event.target.value)">
-        </div>
-        <div class="play-container">
-            <ng-container *ngFor="let song of songs | async">
-                <div class="play-card">
-                    <div class="play-icon">
-                        <img [src]="song.thumbnailUrl" class="play-img" />
-                    </div>
-                    <div>
-                        <h3 class="song-title">{{ song.title }} </h3>
-                        <p class="album-title">{{ song.album.title }}</p>
-                        <div class="player-info">
-                            <span class="singer-title">{{ song.singer}}</span>
-                            <span class="song-time">{{ song.playTime }}</span>
+        <div *ngIf="songs | async as songs; else loader">
+            <div class="search-bar-wrap">
+                <mat-icon>search</mat-icon>
+                <input type="text" class="search-ip" (input)="searchSong($event.target.value)">
+            </div>
+            <div class="play-container">
+                <ng-container *ngFor="let song of songs">
+                    <div class="play-card">
+                        <div class="play-icon">
+                            <img [src]="song.thumbnailUrl" class="play-img" />
+                        </div>
+                        <div>
+                            <h3 class="song-title">{{ song.title }} </h3>
+                            <p class="album-title">{{ song.album.title }}</p>
+                            <div class="player-info">
+                                <span class="singer-title">{{ song.singer}}</span>
+                                <span class="song-time">{{ song.playTime }}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </ng-container>
+                </ng-container>
+            </div>    
         </div>
+        <ng-template #loader>
+            <app-loader></app-loader>
+        </ng-template>
     </mat-tab>
 
     <mat-tab label="Playlist">
@@ -42,6 +48,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>    
     </mat-tab>
 </mat-tab-group>

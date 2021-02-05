@@ -15,6 +15,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { PlaylistNameDialogComponent } from './home/playlist-name-dialog/playlist-name-dialog.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { LoaderComponent } from './home/loader/loader.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { MatInputModule } from '@angular/material/input';
     AppComponent,
     HomeComponent,
     PlaylistComponent,
-    PlaylistNameDialogComponent
+    PlaylistNameDialogComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,

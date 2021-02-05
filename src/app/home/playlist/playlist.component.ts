@@ -11,7 +11,7 @@ import { SongService } from 'src/app/song.service';
 })
 export class PlaylistComponent implements OnInit {
   searchSongString$ = new BehaviorSubject('');
-  playlist$ = new BehaviorSubject<any>({});
+  playlist$ = new BehaviorSubject<any>({ songs: []});
   playlistPage = 'noSong';
   songs;
   playlistName;
@@ -20,22 +20,18 @@ export class PlaylistComponent implements OnInit {
   // called when you search the song
   songsSub$ = combineLatest([this.songService.songs$, this.searchSongString$]).pipe(
     map(([songs, searchSongString ]) => {
-      songs.map(song => {
-        if(this.playlist$?.value?.id) {
-          song['isSelected'] = this.playlist$.value.songs.some(x => x.id == song.id);
+        if(this.addSongs.length == 0 && this.playlist$.value.songs) {
+          songs.map(song => {
+            song['isSelected'] = this.playlist$.value.songs.some(x => x.id == song.id);
+          })
+          this.addSongs = [...this.playlist$.value.songs];  
         }
-      })
-
-      if(this.playlist$.value?.songs) {
-        this.addSongs = [...this.playlist$.value.songs];
-      }
 
       songs = songs.filter(song => song.title.substring(0, searchSongString.length) == searchSongString);
       songs = songs.sort((song1: any, song2: any) => song2.isSelected - song1.isSelected);
       songs = songs.splice(0, 10);
       return songs;
-    }),
-    tap(data => console.log('playlist', this.playlist$.value, 'addSong', this.addSongs, 'song', data))
+    })
   ).subscribe(songs => this.songs = songs)
 
   constructor(
@@ -57,7 +53,6 @@ export class PlaylistComponent implements OnInit {
           song['isSelected'] = playlist.songs.some(x => x.id == song.id);
         })
       }
-      console.log('playlist', playlist, 'addSongs', this.addSongs, 'songs', this.songs)
     })
 
     if(this.playlist$?.value?.id) {
@@ -96,11 +91,11 @@ export class PlaylistComponent implements OnInit {
 
   // called when you unsave the song selection
   unsavePlaylist() {
-    this.songs.map(song => {
-      song.isSelected = this.playlist$.value.songs.some(x => x.id == song.id);
-    });
-    this.addSongs = [...this.playlist$.value.songs];
     if(this.playlist$.value.id) {
+      this.songs.map(song => {
+        song.isSelected = this.playlist$.value.songs.some(x => x.id == song.id);
+      });
+      this.addSongs = [...this.playlist$.value.songs];
       this.playlistPage = 'playlist';
     } else {
       this.router.navigate(['']);
@@ -117,15 +112,15 @@ export class PlaylistComponent implements OnInit {
         this.addSongs.splice(this.addSongs.findIndex(x => x.id == song.id), 1);
       }
     }
-    console.log(this.addSongs)
   }
 
   searchSong(string) {
-    this.searchSongString$.next(string);
+    this.searchSongString$.next(string.trim().toLowerCase());
   }
 
   // called when you land on select song page
   addSongToPlaylist() {
+    this.searchSongString$.next('')
     this.playlistPage = 'selectSong';
   }
 
